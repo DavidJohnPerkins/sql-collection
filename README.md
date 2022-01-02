@@ -1,1 +1,1 @@
-# sql-collection
+# sql-collection - A database holding untyped collections of items in 4NF.

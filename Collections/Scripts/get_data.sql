@@ -1,4 +1,4 @@
-DECLARE @sql				nvarchar(MAX) = '',
+DECLARE @sql				nvarchar(MAX) = 'david',
 		@col_sql			varchar(MAX) = '',
 		--@coll_name		varchar(255) = 'OS LANDRANGER' ,
 		@coll_name			varchar(255) = 'OS EXPLORER' ,
@@ -7,7 +7,8 @@ DECLARE @sql				nvarchar(MAX) = '',
 		@r nvarchar(MAX)
 
 
-set @sql = CORE.r_collection('OS EXPLORER', 'MAP NUMBER')
+set @sql = CORE.r_collection_sql('OS EXPLORER', 'MAP NUMBER')
+print @sql;RETURN
 
 exec sp_executesql @sql, N'@r nvarchar(MAX) out', @r out
 
@@ -51,4 +52,4 @@ SET @sql = REPLACE(@sql, '^', '''')
 print @sql
 
 
-select CORE.r_collection('OS EXPLORER', 'NAME')
+--select CORE.r_collection_sql('OS EXPLORER', 'NAME')

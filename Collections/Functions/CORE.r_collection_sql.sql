@@ -1,3 +1,6 @@
+USE Collections
+GO
+
 DROP FUNCTION IF EXISTS CORE.r_collection_sql;
 GO
 

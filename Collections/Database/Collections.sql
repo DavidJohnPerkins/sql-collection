@@ -13,14 +13,5 @@ GO
 CREATE DATABASE Collections
 GO
 
-USE Collections
-GO
-
-CREATE SCHEMA COLLECTION
-GO
-
-CREATE SCHEMA CORE
-GO
-
 CREATE USER	dp FOR LOGIN dp
 EXEC sp_addrolemember 'db_owner', 'sa'

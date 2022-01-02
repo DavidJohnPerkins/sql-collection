@@ -12,7 +12,8 @@ AS
 BEGIN
 
 	DECLARE	@sql		nvarchar(MAX) = '',
-			@col_sql	nvarchar(MAX) = ''
+			@col_sql	nvarchar(MAX) = '',
+			@result		nvarchar(MAX)
 
 	CREATE TABLE #t (j nvarchar(MAX))
 
@@ -54,8 +55,8 @@ BEGIN
 	IF @p_debug = 1
 		PRINT @sql
 
-	INSERT INTO #t
-	EXEC (@sql)
+	--INSERT INTO #t
+	--EXEC (@sql)
 	
-	--EXEC sp_executesql @sql, N'@result varchar(MAX) out', @result
+	EXEC sp_executesql @sql, N'@result varchar(MAX) out', @result
 END

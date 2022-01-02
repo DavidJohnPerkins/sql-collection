@@ -1,0 +1,5 @@
+USE Collections
+GO
+
+CREATE SCHEMA COLLECTION
+GO

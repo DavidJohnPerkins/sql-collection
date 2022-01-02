@@ -15,7 +15,7 @@ BEGIN
 			@col_sql	nvarchar(MAX) = '',
 			@result		nvarchar(MAX)
 
-	CREATE TABLE #t (j nvarchar(MAX))
+	--CREATE TABLE #t (j nvarchar(MAX))
 
 	SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 0)
 

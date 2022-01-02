@@ -9,7 +9,7 @@ GO
 DROP FUNCTION IF EXISTS COLLECTION.collection_id
 GO
 
-CREATE FUNCTION COLLECTION.collection_id(@collection_name varchar(255) /*, @collection_title varchar(255)*/)
+CREATE FUNCTION COLLECTION.collection_id(@collection_name varchar(255))
 RETURNS int AS  
 BEGIN
 	DECLARE @return_val int 
@@ -19,11 +19,8 @@ BEGIN
 			a.item_id 
 		FROM 
 			COLLECTION.item_attribute a
-			INNER JOIN COLLECTION.item_attribute_field af
-			ON a.item_attr_id = af.item_attr_id
 		WHERE
-			a.attr_value = @collection_name /*AND
-			af.item_attr_name = @collection_title*/
+			a.attr_value = @collection_name
 	)
 
 	RETURN @return_val

@@ -9,7 +9,7 @@ GO
 DROP FUNCTION IF EXISTS COLLECTION.child_column_list
 GO
 
-CREATE FUNCTION COLLECTION.child_column_list(@collection_name varchar(255), @p_typed bit /*, @collection_title varchar(255)*/)
+CREATE FUNCTION COLLECTION.child_column_list(@p_collection_name varchar(255), @p_typed bit)
 RETURNS varchar(MAX) AS 
 BEGIN
 
@@ -35,7 +35,7 @@ BEGIN
 				INNER JOIN COLLECTION.item_attribute_field iaf
 				ON ia.item_attr_id = iaf.item_attr_id
 				INNER JOIN COLLECTION.item iap
-				ON iap.item_parent = COLLECTION.collection_id(@collection_name /*, @collection_title*/) AND ia.item_id = iap.item_id
+				ON iap.item_parent = COLLECTION.collection_id(@p_collection_name) AND ia.item_id = iap.item_id
 			) w
 	)
 

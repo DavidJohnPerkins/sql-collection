@@ -6,6 +6,7 @@ GO
 CREATE PROCEDURE COLLECTION.r_collection_sql(
 	@p_collection_name	varchar(50),
 	@p_sort_col			varchar(50),
+	@p_typed			bit = 0,
 	@p_debug			bit = 0
 )
 AS
@@ -13,11 +14,15 @@ BEGIN
 
 	DECLARE	@sql		nvarchar(MAX) = '',
 			@col_sql	nvarchar(MAX) = '',
+			@col_pvt	nvarchar(MAX) = '',
 			@result		nvarchar(MAX)
 
-	--CREATE TABLE #t (j nvarchar(MAX))
+	IF @p_typed = 0
+		SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 0)
+	ELSE
+		SET @col_sql = COLLECTION.column_list_convert(@p_collection_name)
 
-	SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 0)
+	SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)
 
 	SET @sql = '
 		SELECT 
@@ -47,7 +52,7 @@ BEGIN
 			[~key_col] FOR JSON AUTO'
 
 	SET @sql = REPLACE(@sql, '~col_sql_sel', @col_sql)
-	SET @sql = REPLACE(@sql, '~col_sql_pvt', @col_sql)
+	SET @sql = REPLACE(@sql, '~col_sql_pvt', @col_pvt)
 	SET @sql = REPLACE(@sql, '~coll_name', @p_collection_name)
 	SET @sql = REPLACE(@sql, '~key_col', @p_sort_col)
 	SET @sql = REPLACE(@sql, '^', '''')

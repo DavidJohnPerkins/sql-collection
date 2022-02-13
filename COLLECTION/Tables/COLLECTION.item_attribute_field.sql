@@ -31,8 +31,13 @@ GO
 CREATE UNIQUE CLUSTERED INDEX U_IDX_item_attr_fld_id_name ON COLLECTION.item_attribute_field (item_attr_id, item_attr_name) ON [PRIMARY];
 GO
 */
+BEGIN TRANSACTION
+
 ALTER TABLE COLLECTION.item_attribute_field
 	ADD type_id int NOT NULL DEFAULT 1
+GO
+ALTER TABLE COLLECTION.item_attribute_field
+	ADD return_length int NULL
 GO
 
 DROP INDEX U_IDX_item_attr_fld_id_name ON COLLECTION.item_attribute_field
@@ -60,10 +65,31 @@ ALTER TABLE COLLECTION.item_attribute_field
 UPDATE
 	iaf 
 SET 
-	iaf.type_id = 2
+	iaf.type_id = 1,
+	iaf.return_length = 5
 FROM
 	COLLECTION.item_attribute_field iaf
 WHERE
 	iaf.item_attr_name = 'MAP NUMBER'
 
+UPDATE
+	iaf 
+SET 
+	iaf.return_length = 50
+FROM
+	COLLECTION.item_attribute_field iaf
+WHERE
+	iaf.item_attr_name = 'NAME'
 
+UPDATE
+	iaf 
+SET 
+	iaf.type_id = 1,
+	iaf.return_length = 255
+FROM
+	COLLECTION.item_attribute_field iaf
+WHERE
+	iaf.item_attr_name IN ('MAIN SETTLEMENTS', 'DESCRIPTION', 'MAP TITLE')
+
+ COMMIT TRANSACTION
+ 

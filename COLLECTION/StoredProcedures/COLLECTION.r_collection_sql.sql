@@ -7,6 +7,7 @@ CREATE PROCEDURE COLLECTION.r_collection_sql(
 	@p_collection_name	varchar(50),
 	@p_sort_col			varchar(50),
 	@p_typed			bit = 0,
+	@p_return_json		bit = 0,
 	@p_debug			bit = 0
 )
 AS
@@ -17,11 +18,14 @@ BEGIN
 			@col_pvt	nvarchar(MAX) = '',
 			@result		nvarchar(MAX)
 
+	/*
 	IF @p_typed = 0
 		SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 0)
 	ELSE
 		SET @col_sql = COLLECTION.column_list_convert(@p_collection_name)
+	*/
 
+	SET @col_sql = COLLECTION.child_column_list(@p_collection_name, @p_typed)
 	SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)
 
 	SET @sql = '
@@ -49,12 +53,22 @@ BEGIN
 				)
 			) AS pt
 		ORDER BY
-			[~key_col] FOR JSON AUTO'
+			[~key_col] ~return_type'
 
 	SET @sql = REPLACE(@sql, '~col_sql_sel', @col_sql)
 	SET @sql = REPLACE(@sql, '~col_sql_pvt', @col_pvt)
 	SET @sql = REPLACE(@sql, '~coll_name', @p_collection_name)
 	SET @sql = REPLACE(@sql, '~key_col', @p_sort_col)
+
+	IF @p_return_json = 0
+	BEGIN
+		SET @sql = REPLACE(@sql, '~return_type', '')
+	END
+	ELSE
+	BEGIN
+		SET @sql = REPLACE(@sql, '~return_type', 'FOR JSON AUTO')
+	END
+
 	SET @sql = REPLACE(@sql, '^', '''')
 
 	IF @p_debug = 1

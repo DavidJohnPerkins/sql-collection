@@ -17,13 +17,17 @@ BEGIN
 	
 	SET @return_val = (
 		SELECT
-			STRING_AGG('[' + w.item_attr_name + ']' + CASE WHEN @p_typed = 1 THEN 
-				w.type_code	ELSE '' END, ',')
+			STRING_AGG( 
+				CASE WHEN @p_typed = 1 THEN
+					CASE WHEN  w.return_length IS NOT NULL THEN
+					'CONVERT(' + w.type_sql + '(' + CONVERT(varchar, w.return_length) + '), ' + UTILS.sb(w.item_attr_name) + ')' + ' AS ' + UTILS.sb(w.item_attr_name) ELSE UTILS.sb(w.item_attr_name) END
+				ELSE UTILS.sb(w.item_attr_name) END, ', ')
 		FROM (
 			SELECT DISTINCT 
 				ia.item_attr_id,
 				iaf.item_attr_name,
-				dt.type_code
+				iaf.return_length,
+				dt.type_sql
 			FROM
 				COLLECTION.item_attribute ia
 				INNER JOIN COLLECTION.item_attribute_field iaf
@@ -32,7 +36,7 @@ BEGIN
 				ON ia.item_attr_id = iaf.item_attr_id
 				INNER JOIN COLLECTION.item iap
 				ON iap.item_parent = COLLECTION.collection_id(@p_collection_name) AND ia.item_id = iap.item_id
-			) w
+		) w
 	)
 
 	RETURN @return_val

@@ -1,31 +1,21 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS COLLECTION.r_collection_sql
+DROP FUNCTION IF EXISTS CORE.script_collection_sql;
 GO
-CREATE PROCEDURE COLLECTION.r_collection_sql(
-	@p_collection_name	varchar(50),
-	@p_sort_col			varchar(50),
-	@p_typed			bit = 0,
-	@p_return_json		bit = 0,
-	@p_debug			bit = 0
-)
+
+CREATE FUNCTION CORE.script_collection_sql(@p_collection_name CORE.collection_name)
+RETURNS nvarchar(max) 
 AS
 BEGIN
 
 	DECLARE	@sql		nvarchar(MAX) = '',
+			@return_sql	varchar(MAX),
 			@col_sql	nvarchar(MAX) = '',
 			@col_pvt	nvarchar(MAX) = '',
 			@result		nvarchar(MAX)
 
-	/*
-	IF @p_typed = 0
-		SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 0)
-	ELSE
-		SET @col_sql = COLLECTION.column_list_convert(@p_collection_name)
-	*/
-
-	SET @col_sql = COLLECTION.child_column_list(@p_collection_name, @p_typed)
+	SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 1)
 	SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)
 
 	SET @sql = '
@@ -51,31 +41,15 @@ BEGIN
 				FOR st.item_attr_name IN (
 					~col_sql_pvt
 				)
-			) AS pt
-		ORDER BY
-			[~key_col] ~return_type'
+			) AS pt'
 
 	SET @sql = REPLACE(@sql, '~col_sql_sel', @col_sql)
 	SET @sql = REPLACE(@sql, '~col_sql_pvt', @col_pvt)
 	SET @sql = REPLACE(@sql, '~coll_name', @p_collection_name)
-	SET @sql = REPLACE(@sql, '~key_col', @p_sort_col)
-
-	IF @p_return_json = 0
-	BEGIN
-		SET @sql = REPLACE(@sql, '~return_type', '')
-	END
-	ELSE
-	BEGIN
-		SET @sql = REPLACE(@sql, '~return_type', 'FOR JSON AUTO')
-	END
 
 	SET @sql = REPLACE(@sql, '^', '''')
 
-	IF @p_debug = 1
-		PRINT @sql
+	RETURN @sql
 
-	--INSERT INTO #t
-	--EXEC (@sql)
-	
-	EXEC sp_executesql @sql, N'@result varchar(MAX) out', @result
 END
+GO

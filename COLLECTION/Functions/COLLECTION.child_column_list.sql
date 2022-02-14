@@ -20,12 +20,12 @@ BEGIN
 			STRING_AGG( 
 				CASE WHEN @p_typed = 1 THEN
 					CASE WHEN  w.return_length IS NOT NULL THEN
-					'CONVERT(' + w.type_sql + '(' + CONVERT(varchar, w.return_length) + '), ' + UTILS.sb(w.item_attr_name) + ')' + ' AS ' + UTILS.sb(w.item_attr_name) ELSE UTILS.sb(w.item_attr_name) END
-				ELSE UTILS.sb(w.item_attr_name) END, ', ')
+					'CONVERT(' + w.type_sql + '(' + CONVERT(varchar, w.return_length) + '), ' + item_attr_name + ')' + ' AS ' + item_attr_name ELSE item_attr_name END
+				ELSE item_attr_name END, ', ')
 		FROM (
 			SELECT DISTINCT 
 				ia.item_attr_id,
-				iaf.item_attr_name,
+				UTILS.sb(iaf.item_attr_name) AS item_attr_name,
 				iaf.return_length,
 				dt.type_sql
 			FROM

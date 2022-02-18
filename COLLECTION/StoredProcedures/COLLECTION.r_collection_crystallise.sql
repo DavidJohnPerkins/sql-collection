@@ -11,11 +11,11 @@ CREATE PROCEDURE COLLECTION.r_collection_crystallise(
 AS
 BEGIN
 
-	DECLARE	@sql		nvarchar(MAX) = '',
-			@col_sql	nvarchar(MAX) = '',
-			@col_pvt	nvarchar(MAX) = '',
+	DECLARE	@sql		CORE.sql_var = '',
+			@col_sql	CORE.sql_var = '',
+			@col_pvt	CORE.sql_var = '',
 			@view_name	CORE.view_name,
-			@result		nvarchar(MAX)
+			@result		CORE.sql_var
 
 	SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 1)
 	SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)

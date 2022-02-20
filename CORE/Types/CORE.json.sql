@@ -1,0 +1,8 @@
+USE Collections
+GO
+
+DROP TYPE IF EXISTS CORE.json
+GO
+
+CREATE TYPE CORE.json
+FROM nvarchar(MAX) NOT NULL

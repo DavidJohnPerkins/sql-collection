@@ -1,8 +1,8 @@
 USE Collections
 GO
 
-DECLARE @insert COLLECTION.item_list
-DECLARE @jsonInfo NVARCHAR(MAX)
+DECLARE @insert COLLECTION.item_list,
+		@jsonInfo CORE.json
 
 SET @jsonInfo=N'[{  
     "parent_collection": "OS EXPLORER",  
@@ -106,4 +106,4 @@ INSERT INTO @insert
 */
 --select * from @insert
 
-EXEC COLLECTION.cu_collection_json @jsonInfo, true
+EXEC COLLECTION.cu_collection_json @jsonInfo, true, false

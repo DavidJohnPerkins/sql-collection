@@ -1,18 +1,19 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS CORE.cu_collection
+DROP PROCEDURE IF EXISTS CORE.cu_collection_item
 GO
 
-CREATE PROCEDURE CORE.cu_collection
-	@insert 			COLLECTION.item_list READONLY ,
-	@collection_name	varchar(255) = NULL
+CREATE PROCEDURE CORE.cu_collection_item
+	@p_insert 			CORE.item_list READONLY ,
+	@p_debug			bit = 0,
+	@p_execute			bit = 1
 AS
 BEGIN
 
 	SET NOCOUNT ON
 
-	DECLARE @item_id	int 
+	DECLARE @parent_id int 
 
 	DECLARE @keys TABLE (
 		item_key	varchar(255),
@@ -22,7 +23,7 @@ BEGIN
 
 		BEGIN TRANSACTION
 
-		IF EXISTS (SELECT 1 FROM @insert i WHERE i.parent_item IS NULL)
+		IF EXISTS (SELECT 1 FROM @p_insert i WHERE i.parent_item IS NULL)
 		BEGIN
 		
 			INSERT INTO COLLECTION.item (item_parent, create_date, create_user)
@@ -31,15 +32,15 @@ BEGIN
 				GETDATE(), 
 				SYSTEM_USER
 
-			SET @item_id = @@IDENTITY
+			SET @parent_id = @@IDENTITY
 
 			INSERT INTO COLLECTION.item_attribute (item_id, item_attr_id, attr_value)
 			SELECT DISTINCT
-				@item_id,
+				@parent_id 		,
 				af.item_attr_id,
 				i.attr_value
 			FROM 
-				@insert i
+				@p_insert i
 				INNER JOIN COLLECTION.item_attribute_field af
 				ON i.attr_name = af.item_attr_name
 			WHERE
@@ -48,19 +49,17 @@ BEGIN
 		ELSE
 		BEGIN
 
-			SET @item_id = (
+			SET @parent_id = (
 				SELECT
 					a.item_id 
 				FROM 
 					COLLECTION.item_attribute a
-					INNER JOIN COLLECTION.item_attribute_field af
-					ON a.item_attr_id = af.item_attr_id
 				WHERE
-					a.attr_value = (SELECT TOP 1 i.parent_item FROM @insert i) /*AND
-					af.item_attr_name = @collection_name*/
+					a.attr_value = (SELECT TOP 1 i.parent_item FROM @p_insert i)
 			)
 		
-			PRINT @item_id
+			IF @p_debug = 1
+			 	SELECT 'CORE.cu_collection_item 1:', @parent_id 		 
 
 		END
 
@@ -71,7 +70,7 @@ BEGIN
 			SELECT DISTINCT 
 				i.item_key
 			FROM
-				@insert i 
+				@p_insert i 
 			WHERE 
 				i.parent_item IS NOT NULL		
 		)
@@ -82,9 +81,12 @@ BEGIN
 		FROM
 			w_key w
 
+		IF @p_debug = 1
+			SELECT 'CORE.cu_collection_item 1:', k.* FROM @keys k
+
 		INSERT INTO COLLECTION.item (item_parent)
 		SELECT
-			@item_id
+			@parent_id 	
 		FROM 
 			@keys k
 
@@ -94,7 +96,7 @@ BEGIN
 			af.item_attr_id,
 			i.attr_value
 		FROM 
-			@insert i
+			@p_insert i
 			INNER JOIN @keys k
 			ON i.item_key = k.item_key
 			INNER JOIN COLLECTION.item_attribute_field af
@@ -102,7 +104,15 @@ BEGIN
 		WHERE
 			i.parent_item IS NOT NULL			
 
-		COMMIT TRANSACTION
+		IF @p_execute = 1
+		BEGIN
+			COMMIT TRANSACTION
+		END
+		ELSE
+		BEGIN
+			ROLLBACK TRANSACTION
+			PRINT 'Transaction rolled back - no changes made'
+		END
 
 	END TRY
 

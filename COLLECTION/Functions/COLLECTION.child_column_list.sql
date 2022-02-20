@@ -10,7 +10,7 @@ DROP FUNCTION IF EXISTS COLLECTION.child_column_list
 GO
 
 CREATE FUNCTION COLLECTION.child_column_list(@p_collection_name varchar(255), @p_typed bit)
-RETURNS varchar(MAX) AS 
+RETURNS CORE.sql_var AS 
 BEGIN
 
 	DECLARE @return_val varchar(MAX)

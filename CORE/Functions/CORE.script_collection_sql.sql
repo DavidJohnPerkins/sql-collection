@@ -9,11 +9,11 @@ RETURNS nvarchar(max)
 AS
 BEGIN
 
-	DECLARE	@sql		nvarchar(MAX) = '',
-			@return_sql	varchar(MAX),
-			@col_sql	nvarchar(MAX) = '',
-			@col_pvt	nvarchar(MAX) = '',
-			@result		nvarchar(MAX)
+	DECLARE	@sql		CORE.sql_var = '',
+			@return_sql	CORE.sql_var,
+			@col_sql	CORE.sql_var = '',
+			@col_pvt	CORE.sql_var = '',
+			@result		CORE.sql_var
 
 	SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 1)
 	SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)

@@ -1,19 +1,20 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS COLLECTION.cu_collection_json
+DROP PROCEDURE IF EXISTS COLLECTION.cu_collection_item_json
 GO
 
-CREATE PROCEDURE COLLECTION.cu_collection_json
-	-- @p_collection_name	varchar(255),
-	@p_input_json		nvarchar(MAX),
-	@p_debug			bit = FALSE
+CREATE PROCEDURE COLLECTION.cu_collection_item_json
+	@p_input_json		CORE.json,
+	@p_debug			bit = 0,
+	@p_execute			bit = 1
+
 AS
 BEGIN
 
 	SET NOCOUNT ON
 
-	DECLARE @insert		COLLECTION.item_list
+	DECLARE @insert		CORE.item_list
 	
 	BEGIN TRY
 	
@@ -28,7 +29,7 @@ BEGIN
 		(
 			parent_collection varchar(255),
 			parent_item_key varchar(255),
-			parent_item_attribute nvarchar(MAX) AS json
+			parent_item_attribute CORE.json AS json
 		) c
 		CROSS APPLY OPENJSON (c.parent_item_attribute)
 		WITH
@@ -48,14 +49,14 @@ BEGIN
 		WITH
 		(
 			parent_collection varchar(255),
-			collection_attribute nvarchar(MAX) AS json,
-			item nvarchar(MAX) AS json
+			collection_attribute CORE.json AS json,
+			item CORE.json AS json
 		) c
 		CROSS APPLY OPENJSON (c.item)
 		WITH
 		(
 			item_key varchar(100),
-			item_attribute nvarchar(MAX) AS json
+			item_attribute CORE.json AS json
 		) i
 		CROSS APPLY OPENJSON (i.item_attribute)
 		WITH
@@ -65,9 +66,11 @@ BEGIN
 		) a
 
 		IF @p_debug = 1
-			SELECT * from @insert
+		BEGIN
+			SELECT 'COLLECTION.cu_collection_item 1', i.* from @insert i
+		END
 
-		EXEC CORE.cu_collection @insert
+		EXEC CORE.cu_collection_item @insert, @p_debug, @p_execute
 
 	END TRY
 

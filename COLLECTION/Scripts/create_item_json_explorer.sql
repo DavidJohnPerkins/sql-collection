@@ -1,8 +1,8 @@
 USE Collections
 GO
 
-DECLARE @insert COLLECTION.item_list
-DECLARE @jsonInfo NVARCHAR(MAX)
+DECLARE @insert CORE.item_list,
+		@json_data CORE.json
 /*
 	"parent_item_key": "OSE",
 	"parent_item_attribute": [
@@ -11,7 +11,7 @@ DECLARE @jsonInfo NVARCHAR(MAX)
 		{"attr_name": "STARTED", "attr_value": "2021-10-30"}
 	],
 */
-SET @jsonInfo=N'[{  
+SET @json_data = N'[{  
     "parent_item": "OS EXPLORER",
     "item":[{
 		"item_key": "235",
@@ -82,20 +82,19 @@ SET @jsonInfo=N'[{
 				{"attr_name": "MAIN SETTLEMENTS", "attr_value": "Hexham|Haltwhistle"}]}
 	]
 }]';
-
+/*
 INSERT INTO @insert 
 SELECT
 	CASE WHEN c.parent_item = '0' THEN NULL ELSE c.parent_item END,
 	c.parent_item_key,
 	ca.attr_name ,
 	ca.attr_value
-FROM OPENJSON (@jsonInfo)
+FROM OPENJSON (@json_data)
 WITH
 (
     parent_item varchar(255),
     parent_item_key varchar(255),
-	parent_item_attribute nvarchar(MAX) AS json/*,
-    item nvarchar(MAX) AS json*/
+	parent_item_attribute CORE.json AS json
 ) c
 CROSS APPLY OPENJSON (c.parent_item_attribute)
 WITH
@@ -111,18 +110,18 @@ SELECT
 	i.item_key,
 	a.attr_name ,
 	a.attr_value
-FROM OPENJSON (@jsonInfo)
+FROM OPENJSON (@json_data)
 WITH
 (
     parent_item varchar(255),
-	collection_attribute nvarchar(MAX) AS json,
-    item nvarchar(MAX) AS json
+	collection_attribute CORE.json AS json,
+    item CORE.json AS json
 ) c
 CROSS APPLY OPENJSON (c.item)
 WITH
 (
     item_key varchar(100),
-    item_attribute nvarchar(MAX) AS json
+    item_attribute CORE.json AS json
 ) i
 CROSS APPLY OPENJSON (i.item_attribute)
 WITH
@@ -131,5 +130,5 @@ WITH
     attr_value varchar(MAX)
 ) a
 select * from @insert --where parent_item is NULL
-
-EXEC COLLECTION.collection_create_add @insert
+*/
+EXEC COLLECTION.cu_collection_item_json @json_data, 1, 0

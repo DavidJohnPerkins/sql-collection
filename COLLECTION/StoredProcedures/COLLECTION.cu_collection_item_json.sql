@@ -21,7 +21,7 @@ BEGIN
 		INSERT INTO @insert 
 		SELECT
 			CASE WHEN c.parent_collection = '0' THEN NULL ELSE c.parent_collection END,
-			c.parent_item_key,
+			--c.parent_item_key,
 			ca.attr_name ,
 			ca.attr_value
 		FROM OPENJSON (@p_input_json)
@@ -42,7 +42,7 @@ BEGIN
 
 		SELECT
 			c.parent_collection,
-			i.item_key,
+			--i.item_key,
 			a.attr_name ,
 			a.attr_value
 		FROM OPENJSON (@p_input_json)

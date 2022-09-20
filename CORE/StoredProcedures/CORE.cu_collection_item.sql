@@ -36,7 +36,7 @@ BEGIN
 
 			INSERT INTO COLLECTION.item_attribute (item_id, item_attr_id, attr_value)
 			SELECT DISTINCT
-				@parent_id 		,
+				@parent_id,
 				af.item_attr_id,
 				i.attr_value
 			FROM 

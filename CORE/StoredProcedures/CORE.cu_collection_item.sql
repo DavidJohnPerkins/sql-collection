@@ -18,9 +18,14 @@ BEGIN
 			@parent_id 			int,
 			@keyed_coll			bit = 0;
 
-	DECLARE @keys TABLE (
-		item_key		varchar(20),
+	DECLARE @check_keys TABLE (
+		item_key_value	varchar(20),
 		item_attr_id	int
+	)
+
+	DECLARE @insert_keys TABLE (
+		item_key_value	varchar(20),
+		parent_id		int
 	)
 
 	BEGIN TRY
@@ -31,8 +36,8 @@ BEGIN
 		SET @parent_coll_name = (SELECT TOP 1 parent_item FROM @p_insert)
 		SET @parent_coll_id = ISNULL(COLLECTION.collection_id(@parent_coll_name), 0)
 
-		IF (SELECT COUNT(1) FROM @p_insert) / (SELECT COUNT(DISTINCT i.attr_name) FROM @p_insert i) != 2
-			RAISERROR ('JSON has ragged attributes - operation failed.', 16, 1)
+		--IF (SELECT COUNT(1) FROM @p_insert) / (SELECT COUNT(DISTINCT i.attr_name) FROM @p_insert i) != 2
+		--	RAISERROR ('JSON has ragged attributes - operation failed.', 16, 1)
 		
 		IF (SELECT b.KEYED_COLLECTION FROM COLLECTION.base b WHERE [NAME] = @parent_coll_name) = 'Y'
 			SET @keyed_coll = 1
@@ -46,8 +51,8 @@ BEGIN
 			IF NOT EXISTS (SELECT 1 FROM @p_insert i WHERE i.attr_name = 'KEY_VALUE')
 				RAISERROR ('KEY_VALUE attributes missing for keyed collection - operation failed.', 16, 1)
 
-			INSERT INTO @keys
-			SELECT
+			INSERT INTO @check_keys
+			SELECT DISTINCT 
 				i.attr_value,
 				iaf.item_attr_id
 			FROM
@@ -59,12 +64,12 @@ BEGIN
 
 			IF EXISTS (
 				SELECT
-					k.item_key,
+					k.item_key_value,
 					COUNT(1)
 				FROM 
-					@keys k
+					@check_keys k
 				GROUP BY 
-					k.item_key
+					k.item_key_value
 				HAVING 
 					COUNT(1) > 1)
 				RAISERROR ('Duplicate key values found in input data - operation failed.', 16, 1)
@@ -74,8 +79,8 @@ BEGIN
 					1 
 				FROM
 					COLLECTION.item_attribute ia
-					INNER JOIN @keys k
-					ON ia.item_attr_id = k.item_attr_id AND ia.attr_value = k.item_key)
+					INNER JOIN @check_keys k
+					ON ia.item_attr_id = k.item_attr_id AND ia.attr_value = k.item_key_value)
 				RAISERROR ('Key values found in input data that already exist - operation failed.', 16, 1)
 		END
 
@@ -83,7 +88,6 @@ BEGIN
 
 		IF @parent_coll_id = 0	-- NEW COLLECTION
 		BEGIN
-		
 			INSERT INTO COLLECTION.item (item_parent, create_date, create_user)
 			SELECT DISTINCT
 				0, 
@@ -104,49 +108,49 @@ BEGIN
 			WHERE
 				i.parent_item IS NULL
 		END
+		ELSE
+ 		BEGIN
 
-/*
+ 			SET @parent_id = COLLECTION.collection_id((SELECT TOP 1 i.parent_item FROM @p_insert i))
+
+ 		END
+
 		DECLARE @curr_ident int = (SELECT IDENT_CURRENT('COLLECTION.item'))
 
 		;WITH w_key AS 
 		(
 			SELECT DISTINCT 
-				i.item_key
+				ck.item_key_value
 			FROM
-				@p_insert i 
-			WHERE 
-				i.parent_item IS NOT NULL		
+				@check_keys ck
 		)
-		INSERT INTO @keys
+		INSERT INTO @insert_keys
 		SELECT DISTINCT 
-			w.item_key ,
-			(ROW_NUMBER() OVER (ORDER BY w.item_key)) + @curr_ident
+			w.item_key_value ,
+			(ROW_NUMBER() OVER (ORDER BY w.item_key_value)) + @curr_ident
 		FROM
 			w_key w
 
-		IF @p_debug = 1
-			SELECT 'CORE.cu_collection_item 1:', k.* FROM @keys k
-
 		INSERT INTO COLLECTION.item (item_parent)
 		SELECT
-			@parent_id 	
+			@parent_id
 		FROM 
-			@keys k
+			@insert_keys k
 
 		INSERT INTO COLLECTION.item_attribute (item_id, item_attr_id, attr_value)
 		SELECT
-			k.item_ident,
-			af.item_attr_id,
+			ik.parent_id,
+			iaf.item_attr_id,
 			i.attr_value
 		FROM 
 			@p_insert i
-			INNER JOIN @keys k
-			ON i.item_key = k.item_key
-			INNER JOIN COLLECTION.item_attribute_field af
-			ON i.attr_name = af.item_attr_name
+			INNER JOIN @insert_keys ik
+			ON i.item_key_value = ik.item_key_value
+			INNER JOIN COLLECTION.item_attribute_field iaf
+			ON i.attr_name = iaf.item_attr_name
 		WHERE
 			i.parent_item IS NOT NULL			
-
+		
 		IF @p_execute = 1
 		BEGIN
 			COMMIT TRANSACTION
@@ -156,7 +160,7 @@ BEGIN
 			ROLLBACK TRANSACTION
 			PRINT 'Transaction rolled back - no changes made'
 		END
-*/
+
 	END TRY
 
 	BEGIN CATCH  

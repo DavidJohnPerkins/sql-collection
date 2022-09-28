@@ -77,3 +77,4 @@ BEGIN
 	END CATCH
 END
 GO
+PRINT '---->>> CORE.d_collection_item created successfully'

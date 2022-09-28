@@ -58,3 +58,4 @@ BEGIN
 
 END
 GO
+PRINT '---->>> COLLECTION.d_collection_item_json created successfully'

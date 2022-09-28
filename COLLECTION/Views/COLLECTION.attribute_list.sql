@@ -59,3 +59,4 @@ CREATE VIEW COLLECTION.attribute_list AS
 		ON i.item_id = ia.item_id
 	
 GO
+PRINT '---->>> COLLECTION.attribute_list created successfully'

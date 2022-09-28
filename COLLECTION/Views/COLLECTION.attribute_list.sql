@@ -43,6 +43,7 @@ CREATE VIEW COLLECTION.attribute_list AS
 			iaf2.item_attr_name = 'KEY_VALUE'
 	)
 	SELECT DISTINCT
+		i.item_id,
 		kl.collection_name,
 		kl.key_value,
 		iaf.item_attr_name,
@@ -58,3 +59,4 @@ CREATE VIEW COLLECTION.attribute_list AS
 		ON i.item_id = ia.item_id
 	
 GO
+PRINT '---->>> COLLECTION.attribute_list created successfully'

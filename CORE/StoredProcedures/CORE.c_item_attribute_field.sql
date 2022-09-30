@@ -87,4 +87,4 @@ BEGIN
 
 END
 GO
-PRINT '---->>> CORE.cu_item_attribute_field created successfully'
+PRINT '---->>> CORE.c_item_attribute_field created successfully'

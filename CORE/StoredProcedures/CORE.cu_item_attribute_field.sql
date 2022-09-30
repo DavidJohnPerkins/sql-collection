@@ -1,10 +1,12 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS CORE.cu_item_attribute_field
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'CORE.cu_item_attribute_field') AND [type] IN ('P', 'PC'))
+BEGIN 
+	DROP PROCEDURE CORE.cu_item_attribute_field
+	PRINT '---->>> CORE.cu_item_attribute_field dropped successfully'
+END
 GO
-PRINT '---->>> CORE.cu_item_attribute_field dropped successfully'
-
 /*
 CREATE PROCEDURE CORE.cu_item_attribute_field
 	@insert 			CORE.field_list READONLY ,

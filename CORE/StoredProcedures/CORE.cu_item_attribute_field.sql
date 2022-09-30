@@ -1,10 +1,14 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS CORE.cu_field
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'CORE.cu_item_attribute_field') AND [type] IN ('P', 'PC'))
+BEGIN 
+	DROP PROCEDURE CORE.cu_item_attribute_field
+	PRINT '---->>> CORE.cu_item_attribute_field dropped successfully'
+END
 GO
-
-CREATE PROCEDURE CORE.cu_field
+/*
+CREATE PROCEDURE CORE.cu_item_attribute_field
 	@insert 			CORE.field_list READONLY ,
 	@collection_name	varchar(255) = NULL
 AS
@@ -51,3 +55,6 @@ BEGIN
 	END CATCH
 
 END
+GO
+PRINT '---->>> CORE.cu_item_attribute_field created successfully'
+*/

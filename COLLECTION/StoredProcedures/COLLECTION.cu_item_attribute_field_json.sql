@@ -1,10 +1,14 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS COLLECTION.cu_field_json
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.cu_item_attribute_field_json') AND [type] IN ('P', 'PC'))
+BEGIN 
+	DROP PROCEDURE COLLECTION.cu_item_attribute_field_json
+	PRINT '---->>> COLLECTION.cu_item_attribute_field_json dropped successfully'
+END
 GO
-
-CREATE PROCEDURE COLLECTION.cu_field_json
+/*
+CREATE PROCEDURE COLLECTION.cu_item_attribute_field_json
 	@p_input_json		CORE.json,
 	@p_debug			bit = FALSE,
 	@p_execute			bit = TRUE
@@ -40,7 +44,7 @@ BEGIN
 			SELECT * from @insert
 
 		IF @p_execute = 1
-			EXEC CORE.cu_field @insert
+			EXEC CORE.cu_item_attribute_field @insert
 
 	END TRY
 
@@ -65,3 +69,4 @@ BEGIN
 
 END
 GO
+*/

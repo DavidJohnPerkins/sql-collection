@@ -1,10 +1,12 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS CORE.cu_field
+DROP PROCEDURE IF EXISTS CORE.cu_item_attribute_field
 GO
+PRINT '---->>> CORE.cu_item_attribute_field dropped successfully'
 
-CREATE PROCEDURE CORE.cu_field
+/*
+CREATE PROCEDURE CORE.cu_item_attribute_field
 	@insert 			CORE.field_list READONLY ,
 	@collection_name	varchar(255) = NULL
 AS
@@ -51,3 +53,6 @@ BEGIN
 	END CATCH
 
 END
+GO
+PRINT '---->>> CORE.cu_item_attribute_field created successfully'
+*/

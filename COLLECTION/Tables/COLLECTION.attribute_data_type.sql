@@ -1,8 +1,7 @@
 USE Collections
 GO
 
-BEGIN TRANSACTION
-
+/*
 DROP TABLE 	IF EXISTS COLLECTION.attribute_data_type
 GO
 
@@ -35,3 +34,26 @@ VALUES
 	('nvarchar(MAX)', 'J')
 
 COMMIT TRANSACTION
+*/
+
+IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE [name] = N'return_length_is_auto' AND object_id = object_id(N'COLLECTION.attribute_data_type'))
+BEGIN
+	ALTER TABLE COLLECTION.attribute_data_type
+		ADD return_length_is_auto 	bit NOT NULL DEFAULT 0
+
+END
+GO
+
+IF EXISTS(SELECT 1 FROM sys.columns WHERE [name] = N'return_length_is_auto' AND object_id = object_id(N'COLLECTION.attribute_data_type'))
+BEGIN
+	UPDATE 
+		dt 
+	SET
+		dt.return_length_is_auto = 1
+	FROM
+		COLLECTION.attribute_data_type dt
+	WHERE
+		dt.type_code IN ('F', 'I', 'D', 'J')
+END
+GO
+PRINT '---->>> Column added to COLLECTION.attribute_data_type successfully'

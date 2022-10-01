@@ -1,7 +1,11 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS COLLECTION.d_collection_item_json
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.d_collection_item_json') AND [type] IN ('P', 'PC'))
+BEGIN 
+	DROP PROCEDURE COLLECTION.d_collection_item_json
+	PRINT '########## COLLECTION.d_collection_item_json dropped successfully ##########'
+END
 GO
 
 CREATE PROCEDURE COLLECTION.d_collection_item_json
@@ -58,4 +62,4 @@ BEGIN
 
 END
 GO
-PRINT '---->>> COLLECTION.d_collection_item_json created successfully'
+PRINT '########## COLLECTION.d_collection_item_json created successfully ##########'

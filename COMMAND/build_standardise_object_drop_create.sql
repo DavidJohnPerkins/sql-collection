@@ -25,6 +25,10 @@ GO
 :r "UTILS/Functions/UTILS.sb.sql"
 :r "UTILS/Functions/UTILS.sq.sql"
 
+-- VIEWS
+:r "COLLECTION/Views/COLLECTION.attribute_list.sql"
+:r "COLLECTION/Views/COLLECTION.base.sql"
+
 -- STORED PROCEDURES
 :r "COLLECTION/StoredProcedures/COLLECTION.c_collection_item_json.sql"
 :r "COLLECTION/StoredProcedures/COLLECTION.c_item_attribute_field_json.sql"

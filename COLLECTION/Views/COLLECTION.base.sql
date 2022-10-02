@@ -6,7 +6,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP VIEW IF EXISTS COLLECTION.base
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.base') AND [type] IN ('V'))
+BEGIN 
+	DROP VIEW COLLECTION.base
+	PRINT '########## COLLECTION.base dropped successfully ##########'
+END
 GO
 
 CREATE VIEW COLLECTION.base AS
@@ -42,3 +46,4 @@ CREATE VIEW COLLECTION.base AS
 	) AS pt
 
 GO
+PRINT '########## COLLECTION.base created successfully ##########'

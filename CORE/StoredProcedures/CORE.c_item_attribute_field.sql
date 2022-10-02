@@ -1,13 +1,17 @@
 USE Collections
 GO
 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'CORE.c_item_attribute_field') AND [type] IN ('P', 'PC'))
 BEGIN 
 	DROP PROCEDURE CORE.c_item_attribute_field
-	PRINT '---->>> CORE.c_item_attribute_field dropped successfully'
+	PRINT '########## CORE.c_item_attribute_field dropped successfully ##########'
 END
 GO
-
 
 CREATE PROCEDURE CORE.c_item_attribute_field (
 	@p_item_attr_name		CORE.item_attr_name,
@@ -87,4 +91,4 @@ BEGIN
 
 END
 GO
-PRINT '---->>> CORE.c_item_attribute_field created successfully'
+PRINT '########## CORE.c_item_attribute_field created successfully ##########'

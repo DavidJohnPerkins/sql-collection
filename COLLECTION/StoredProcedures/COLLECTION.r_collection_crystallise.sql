@@ -1,6 +1,11 @@
 USE Collections
 GO
 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.r_collection_crystallise') AND [type] IN ('P', 'PC'))
 BEGIN 
 	DROP PROCEDURE COLLECTION.r_collection_crystallise

@@ -1,7 +1,16 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS CORE.cu_collection_item
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'CORE.cu_collection_item') AND [type] IN ('P', 'PC'))
+BEGIN 
+	DROP PROCEDURE CORE.cu_collection_item
+	PRINT '########## CORE.cu_collection_item dropped successfully ##########'
+END
 GO
 
 CREATE PROCEDURE CORE.cu_collection_item
@@ -183,3 +192,5 @@ BEGIN
 	END CATCH
 
 END
+GO
+PRINT '########## CORE.cu_collection_item created successfully ##########'

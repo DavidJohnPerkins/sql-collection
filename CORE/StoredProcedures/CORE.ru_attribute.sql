@@ -57,20 +57,20 @@ BEGIN
 			@v_new_value IS NULL)
 			RAISERROR ('Invalid JSON %s found - operation failed.', 16, 1, @p_input_json)
 
-		IF NOT EXISTS (SELECT 1 FROM COLLECTION.base b WHERE b.[NAME] = @v_collection_name)
+		IF NOT EXISTS (SELECT 1 FROM COLLECTION.v_base b WHERE b.[NAME] = @v_collection_name)
 			RAISERROR ('Collection %s not found - operation failed.', 16, 1, @v_collection_name)
 
-		IF NOT EXISTS (SELECT 1 FROM COLLECTION.attribute_list al WHERE al.collection_name = @v_collection_name AND al.key_value = @v_item_key_value)
+		IF NOT EXISTS (SELECT 1 FROM COLLECTION.v_attribute_list al WHERE al.collection_name = @v_collection_name AND al.key_value = @v_item_key_value)
 			RAISERROR ('Key value %s not found in collection %s - operation failed.', 16, 1, @v_item_key_value, @v_collection_name)
 
-		IF NOT EXISTS (SELECT 1 FROM COLLECTION.attribute_list al WHERE al.collection_name = @v_collection_name AND al.item_attr_name = 'KEY_VALUE')
+		IF NOT EXISTS (SELECT 1 FROM COLLECTION.v_attribute_list al WHERE al.collection_name = @v_collection_name AND al.item_attr_name = 'KEY_VALUE')
 			RAISERROR ('Key value %s not found for collection %s - operation failed.', 16, 1, @v_item_key_value, @v_collection_name)
 
 		IF NOT EXISTS (
 			SELECT 
 				1 
 			FROM 
-				COLLECTION.attribute_list al 
+				COLLECTION.v_attribute_list al 
 			WHERE 
 				al.collection_name = @v_collection_name AND 
 				al.key_value = @v_item_key_value AND
@@ -84,7 +84,7 @@ BEGIN
 			SELECT 
 				al.attr_id
 			FROM 
-				COLLECTION.attribute_list al 
+				COLLECTION.v_attribute_list al 
 			WHERE 
 				al.collection_name = @v_collection_name AND 
 				al.key_value = @v_item_key_value AND
@@ -94,7 +94,7 @@ BEGIN
 			SELECT 
 				al.attr_id
 			FROM 
-				COLLECTION.attribute_list al 
+				COLLECTION.v_attribute_list al 
 			WHERE 
 				al.collection_name = @v_collection_name AND 
 				al.key_value = @v_item_key_value AND

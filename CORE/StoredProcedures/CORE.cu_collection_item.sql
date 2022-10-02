@@ -48,7 +48,7 @@ BEGIN
 		--IF (SELECT COUNT(1) FROM @p_insert) / (SELECT COUNT(DISTINCT i.attr_name) FROM @p_insert i) != 2
 		--	RAISERROR ('JSON has ragged attributes - operation failed.', 16, 1)
 		
-		IF (SELECT b.KEYED_COLLECTION FROM COLLECTION.base b WHERE [NAME] = @parent_coll_name) = 'Y'
+		IF (SELECT b.KEYED_COLLECTION FROM COLLECTION.v_base b WHERE [NAME] = @parent_coll_name) = 'Y'
 			SET @keyed_coll = 1
 
 		IF @keyed_coll = 0 AND EXISTS (SELECT 1 FROM @p_insert i WHERE i.attr_name = 'KEY_VALUE')

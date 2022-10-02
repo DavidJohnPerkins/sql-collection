@@ -1,7 +1,16 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS COLLECTION.r_collection_crystallise
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.r_collection_crystallise') AND [type] IN ('P', 'PC'))
+BEGIN 
+	DROP PROCEDURE COLLECTION.r_collection_crystallise
+	PRINT '########## COLLECTION.r_collection_crystallise dropped successfully ##########'
+END
 GO
 
 CREATE PROCEDURE COLLECTION.r_collection_crystallise(
@@ -39,3 +48,5 @@ BEGIN
 	EXEC (@sql)
 
 END
+GO
+PRINT '########## COLLECTION.r_collection_crystallise created successfully ##########'

@@ -6,7 +6,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP FUNCTION IF EXISTS COLLECTION.child_column_list
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.child_column_list') AND [type] IN ('F', 'FN'))
+BEGIN 
+	DROP FUNCTION COLLECTION.child_column_list
+	PRINT '########## COLLECTION.child_column_list dropped successfully ##########'
+END
 GO
 
 CREATE FUNCTION COLLECTION.child_column_list(@p_collection_name varchar(255), @p_typed bit)
@@ -43,3 +47,4 @@ BEGIN
 	
 END
 GO
+PRINT '########## COLLECTION.child_column_list created successfully ##########'

@@ -6,7 +6,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP PROCEDURE IF EXISTS CORE.d_collection_item
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'CORE.d_collection_item') AND [type] IN ('P', 'PC'))
+BEGIN 
+	DROP PROCEDURE CORE.d_collection_item
+	PRINT '########## CORE.d_collection_item dropped successfully ##########'
+END
 GO
 
 CREATE PROCEDURE CORE.d_collection_item (
@@ -77,4 +81,4 @@ BEGIN
 	END CATCH
 END
 GO
-PRINT '---->>> CORE.d_collection_item created successfully'
+PRINT '########## CORE.d_collection_item created successfully ##########'

@@ -6,7 +6,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP FUNCTION IF EXISTS COLLECTION.collection_id
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.collection_id') AND [type] IN ('F', 'FN'))
+BEGIN 
+	DROP FUNCTION COLLECTION.collection_id
+	PRINT '########## COLLECTION.collection_id dropped successfully ##########'
+END
 GO
 
 CREATE FUNCTION COLLECTION.collection_id(@collection_name varchar(255))
@@ -27,3 +31,4 @@ BEGIN
 	
 END
 GO
+PRINT '########## COLLECTION.collection_id created successfully ##########'

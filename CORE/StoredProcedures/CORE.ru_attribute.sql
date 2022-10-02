@@ -6,7 +6,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP PROCEDURE IF EXISTS CORE.ru_attribute
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'CORE.ru_attribute') AND [type] IN ('P', 'PC'))
+BEGIN 
+	DROP PROCEDURE CORE.ru_attribute
+	PRINT '########## CORE.ru_attribute dropped successfully ##########'
+END
 GO
 
 CREATE PROCEDURE CORE.ru_attribute (
@@ -134,3 +138,4 @@ BEGIN
 	END CATCH
 END
 GO
+PRINT '########## CORE.ru_attribute created successfully ##########'

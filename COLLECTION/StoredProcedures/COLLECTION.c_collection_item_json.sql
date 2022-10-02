@@ -1,10 +1,19 @@
 USE Collections
 GO
 
-DROP PROCEDURE IF EXISTS COLLECTION.cu_collection_item_json
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE COLLECTION.cu_collection_item_json
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.c_collection_item_json') AND [type] IN ('P', 'PC'))
+BEGIN 
+	DROP PROCEDURE COLLECTION.c_collection_item_json
+	PRINT '########## COLLECTION.c_collection_item_json dropped successfully ##########'
+END
+GO
+
+CREATE PROCEDURE COLLECTION.c_collection_item_json
 	@p_input_json		CORE.json,
 	@p_debug			bit = 0,
 	@p_execute			bit = 1
@@ -94,3 +103,4 @@ BEGIN
 
 END
 GO
+PRINT '########## COLLECTION.c_collection_item_json created successfully ##########'

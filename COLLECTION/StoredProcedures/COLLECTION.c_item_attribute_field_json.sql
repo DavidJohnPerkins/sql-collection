@@ -1,10 +1,15 @@
 USE Collections
 GO
 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.c_item_attribute_field_json') AND [type] IN ('P', 'PC'))
 BEGIN 
 	DROP PROCEDURE COLLECTION.c_item_attribute_field_json
-	PRINT '---->>> COLLECTION.c_item_attribute_field_json dropped successfully'
+	PRINT '########## COLLECTION.c_item_attribute_field_json dropped successfully ##########'
 END
 GO
 
@@ -65,4 +70,4 @@ BEGIN
 
 END
 GO
-PRINT '---->>> COLLECTION.c_item_attribute_field_json created successfully'
+PRINT '########## COLLECTION.c_item_attribute_field_json created successfully ##########'

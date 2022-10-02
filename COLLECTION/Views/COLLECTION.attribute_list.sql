@@ -6,7 +6,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP VIEW IF EXISTS COLLECTION.attribute_list
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.attribute_list') AND [type] IN ('V'))
+BEGIN 
+	DROP VIEW COLLECTION.attribute_list
+	PRINT '########## COLLECTION.attribute_list dropped successfully ##########'
+END
 GO
 
 CREATE VIEW COLLECTION.attribute_list AS
@@ -59,4 +63,4 @@ CREATE VIEW COLLECTION.attribute_list AS
 		ON i.item_id = ia.item_id
 	
 GO
-PRINT '---->>> COLLECTION.attribute_list created successfully'
+PRINT '########## COLLECTION.attribute_list created successfully ##########'

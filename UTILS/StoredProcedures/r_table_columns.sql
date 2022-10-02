@@ -6,7 +6,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP PROCEDURE IF EXISTS UTILS.r_table_columns
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'UTILS.r_table_columns') AND [type] IN ('P', 'PC'))
+BEGIN 
+	DROP PROCEDURE UTILS.r_table_columns
+	PRINT '########## UTILS.r_table_columns dropped successfully ##########'
+END
 GO
 
 CREATE PROCEDURE UTILS.r_table_columns (
@@ -49,3 +53,5 @@ BEGIN
 		RAISERROR (@error_message, @error_severity, @error_state)
 	END CATCH
 END
+GO
+PRINT '########## UTILS.r_table_columns created successfully ##########'

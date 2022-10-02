@@ -1,7 +1,16 @@
 USE Collections
 GO
 
-DROP FUNCTION IF EXISTS CORE.script_collection_sql;
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'CORE.script_collection_sql') AND [type] IN ('F', 'FN'))
+BEGIN 
+	DROP FUNCTION CORE.script_collection_sql
+	PRINT '########## CORE.script_collection_sql dropped successfully ##########'
+END
 GO
 
 CREATE FUNCTION CORE.script_collection_sql(@p_collection_name CORE.collection_name)
@@ -53,3 +62,4 @@ BEGIN
 
 END
 GO
+PRINT '########## CORE.script_collection_sql created successfully ##########'

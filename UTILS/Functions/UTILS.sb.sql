@@ -6,7 +6,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP FUNCTION IF EXISTS UTILS.sb
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'UTILS.sb') AND [type] IN ('F', 'FN'))
+BEGIN 
+	DROP FUNCTION UTILS.sb
+	PRINT '########## UTILS.sb dropped successfully ##########'
+END
 GO
 
 CREATE FUNCTION UTILS.sb(@text varchar(255))
@@ -20,3 +24,4 @@ BEGIN
 	
 END
 GO
+PRINT '########## UTILS.sb created successfully ##########'

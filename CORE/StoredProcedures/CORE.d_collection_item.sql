@@ -24,13 +24,13 @@ BEGIN
 
 	SET NOCOUNT ON;
 
-	IF NOT EXISTS (SELECT 1 FROM COLLECTION.base b WHERE b.[NAME] = @p_collection_name)
+	IF NOT EXISTS (SELECT 1 FROM COLLECTION.v_base b WHERE b.[NAME] = @p_collection_name)
 		RAISERROR ('Collection %s not found - operation failed.', 16, 1, @p_collection_name)
 
-	IF NOT EXISTS (SELECT 1 FROM COLLECTION.attribute_list al WHERE al.collection_name = @p_collection_name AND al.key_value = @p_item_key_value)
+	IF NOT EXISTS (SELECT 1 FROM COLLECTION.v_attribute_list al WHERE al.collection_name = @p_collection_name AND al.key_value = @p_item_key_value)
 		RAISERROR ('Key value %s not found in collection %s - operation failed.', 16, 1, @p_item_key_value, @p_collection_name)
 
-	IF NOT EXISTS (SELECT 1 FROM COLLECTION.attribute_list al WHERE al.collection_name = @p_collection_name AND al.item_attr_name = 'KEY_VALUE')
+	IF NOT EXISTS (SELECT 1 FROM COLLECTION.v_attribute_list al WHERE al.collection_name = @p_collection_name AND al.item_attr_name = 'KEY_VALUE')
 		RAISERROR ('Key value %s not found for collection %s - operation failed.', 16, 1, @p_item_key_value, @p_collection_name)
 
 	BEGIN TRY
@@ -40,7 +40,7 @@ BEGIN
 			SELECT DISTINCT 
 				al.item_id
 			FROM 
-				COLLECTION.attribute_list al 
+				COLLECTION.v_attribute_list al 
 			WHERE 
 				al.collection_name = @p_collection_name AND 
 				al.key_value = @p_item_key_value

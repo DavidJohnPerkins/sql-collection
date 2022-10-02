@@ -13,7 +13,7 @@ BEGIN
 END
 GO
 
-CREATE FUNCTION COLLECTION.child_column_list(@p_collection_name varchar(255), @p_typed bit)
+CREATE FUNCTION COLLECTION.child_column_list(@p_collection_name CORE.collection_name, @p_typed bit)
 RETURNS CORE.sql_var AS 
 BEGIN
 

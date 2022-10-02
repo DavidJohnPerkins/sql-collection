@@ -29,7 +29,7 @@ BEGIN
 	SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 1)
 	SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)
 
-	SET @view_name = 'COLLECTION.base_' + REPLACE(@p_collection_name, ' ', '_')
+	SET @view_name = 'COLLECTION.v_base_' + REPLACE(@p_collection_name, ' ', '_')
 
 	SET @sql = 'DROP VIEW IF EXISTS ' + @view_name
 	EXEC (@sql)

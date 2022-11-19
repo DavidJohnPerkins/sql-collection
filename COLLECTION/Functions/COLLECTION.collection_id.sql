@@ -23,6 +23,8 @@ BEGIN
 			a.item_id 
 		FROM 
 			COLLECTION.item_attribute a
+			INNER JOIN COLLECTION.item i 
+			ON a.item_id = i.item_id AND i.item_parent = 0
 		WHERE
 			a.attr_value = @collection_name
 	)

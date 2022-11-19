@@ -19,7 +19,7 @@ GO
 */
 	SET @json_data = N'[{  
 		"fields": [
-			{"field_name": "INK_NAME", "attr_type_code": "V", "return_length": 50}
+			{"field_name": "MAP_IMAGE", "attr_type_code": "V", "return_length": 50}
 		]
 	}]';
 

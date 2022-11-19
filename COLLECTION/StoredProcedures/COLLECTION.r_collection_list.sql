@@ -6,47 +6,72 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.r_collection_crystallise') AND [type] IN ('P', 'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.r_collection_list') AND [type] IN ('P', 'PC'))
 BEGIN 
-	DROP PROCEDURE COLLECTION.r_collection_crystallise
-	PRINT '########## COLLECTION.r_collection_crystallise dropped successfully ##########'
+	DROP PROCEDURE COLLECTION.r_collection_list
+	PRINT '########## COLLECTION.r_collection_list dropped successfully ##########'
 END
 GO
 
-CREATE PROCEDURE COLLECTION.r_collection_crystallise(
-	@p_collection_name	CORE.collection_name,
-	@p_debug			bit = 0
+CREATE PROCEDURE COLLECTION.r_collection_list(
+	@p_input_json		CORE.json,
+	@p_debug			bit = 0,
+	@p_execute			bit = 1
 )
 AS
 BEGIN
 
-	DECLARE	@sql		CORE.sql_var = '',
-			@col_sql	CORE.sql_var = '',
-			@col_pvt	CORE.sql_var = '',
-			@view_name	CORE.view_name,
-			@result		CORE.sql_var
+	SET NOCOUNT ON
 
-	SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 1)
-	SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)
+	DECLARE @v_collection_view	CORE.sql_var,
+			@v_order_column		CORE.sql_var,
+			@sql 				varchar(MAX)
 
-	SET @view_name = 'COLLECTION.v_base_' + REPLACE(@p_collection_name, ' ', '_')
+	BEGIN TRY
 
-	SET @sql = 'DROP VIEW IF EXISTS ' + @view_name
-	EXEC (@sql)
+		SELECT
+			@v_collection_view 	= c.collection_view,
+			@v_order_column		= c.order_column
+		FROM OPENJSON (@p_input_json)
+		WITH
+		(
+			collection_view	CORE.sql_var,
+			order_column	CORE.sql_var
+		) c
+	
 
-	SET @sql = '
-		CREATE VIEW ~view_name AS
-		~script_sql
-	'
+	SET @sql = 'SELECT c.* FROM COLLECTION.v_base_~coll_view c ORDER BY c.[~order_col]'
 
-	SET @sql = REPLACE(@sql, '~view_name', @view_name)
-	SET @sql = REPLACE(@sql, '~script_sql', CORE.script_collection_sql(@p_collection_name))
+	SET @sql = REPLACE(@sql, '~coll_view', @v_collection_view)
+	SET @sql = REPLACE(@sql, '~order_col', @v_order_column)
 
 	IF @p_debug = 1
 		PRINT @sql
 
-	EXEC (@sql)
+	IF @p_execute = 1
+		EXEC (@sql)
+
+	END TRY
+
+	BEGIN CATCH  
+		DECLARE @error_message varchar(4000)
+		DECLARE @error_severity int  
+		DECLARE @error_state int
+	
+		-- IF @@TRANCOUNT != 0			-- Not required here but retain for completeness
+		-- 	ROLLBACK TRANSACTION
+
+		SELECT   
+			@error_message = ERROR_MESSAGE(),  
+			@error_severity = ERROR_SEVERITY(),  
+			@error_state = ERROR_STATE();  
+
+		RAISERROR (@error_message,
+				@error_severity,
+				@error_state
+				)
+	END CATCH
 
 END
 GO
-PRINT '########## COLLECTION.r_collection_crystallise created successfully ##########'
+PRINT '########## COLLECTION.r_collection_list created successfully ##########'

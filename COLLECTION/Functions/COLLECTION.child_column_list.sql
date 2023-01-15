@@ -29,7 +29,7 @@ BEGIN
 		FROM (
 			SELECT DISTINCT 
 				ia.item_attr_id,
-				UTILS.sb(iaf.item_attr_name) AS item_attr_name,
+				UTILS.sqbr(iaf.item_attr_name) AS item_attr_name,
 				iaf.return_length,
 				dt.type_sql
 			FROM

@@ -29,6 +29,7 @@ BEGIN
 
 	SET @sql = '
 		SELECT 
+			item_id,
 			~col_sql_sel
 		FROM (
 			SELECT 

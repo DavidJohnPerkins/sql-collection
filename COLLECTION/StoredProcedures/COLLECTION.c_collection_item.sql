@@ -6,14 +6,14 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.c_collection_item_json') AND [type] IN ('P', 'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.c_collection_item') AND [type] IN ('P', 'PC'))
 BEGIN 
-	DROP PROCEDURE COLLECTION.c_collection_item_json
-	PRINT '########## COLLECTION.c_collection_item_json dropped successfully ##########'
+	DROP PROCEDURE COLLECTION.c_collection_item
+	PRINT '########## COLLECTION.c_collection_item dropped successfully ##########'
 END
 GO
 
-CREATE PROCEDURE COLLECTION.c_collection_item_json
+CREATE PROCEDURE COLLECTION.c_collection_item
 	@p_input_json		CORE.json,
 	@p_debug			bit = 0,
 	@p_execute			bit = 1
@@ -75,10 +75,10 @@ BEGIN
 
 		IF @p_debug = 1
 		BEGIN
-			SELECT 'COLLECTION.cu_collection_item 1', i.* from @insert i
+			SELECT 'COLLECTION.c_collection_item 1', i.* from @insert i
 		END
 
-		EXEC CORE.cu_collection_item @insert, @p_debug, @p_execute
+		EXEC CORE.c_collection_item @insert, @p_debug, @p_execute
 
 	END TRY
 
@@ -103,4 +103,4 @@ BEGIN
 
 END
 GO
-PRINT '########## COLLECTION.c_collection_item_json created successfully ##########'
+PRINT '########## COLLECTION.c_collection_item created successfully ##########'

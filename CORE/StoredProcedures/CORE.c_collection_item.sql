@@ -45,6 +45,18 @@ BEGIN
 		IF @parent_coll_id = 0 
 			RAISERROR ('Collection %s does not exist - operation failed.', 16, 1, @parent_coll_name)
 
+		IF EXISTS (
+			SELECT 
+				1
+			FROM 
+				@p_insert i 
+				LEFT OUTER JOIN COLLECTION.item_attribute_field iaf
+				ON i.attr_name = iaf.item_attr_name
+			WHERE 
+				iaf.item_attr_name IS NULL
+		)
+			RAISERROR ('Attributes found that are not defined in target database - operation failed.', 16, 1)
+
 		IF (SELECT b.KEYED_COLLECTION FROM COLLECTION.v_base b WHERE [NAME] = @parent_coll_name) = 'Y'
 			SET @keyed_coll = 1
 

@@ -20,6 +20,20 @@ SET @json_data = N'
 					{"attr_name": "QTY_REMAINING", 	"attr_value": 39},
 					{"attr_name": "RATING", 		"attr_value": 4}
 			]
+		},
+		{
+			"item_key_value": "TA002",
+			"item_attribute": [
+					{"attr_name": "KEY_VALUE",		"attr_value": "TA002"},
+					{"attr_name": "BRAND",			"attr_value": "Taccia"},
+					{"attr_name": "RANGE",			"attr_value": "Sunaoiro"},
+					{"attr_name": "INK_NAME", 		"attr_value": "Ao"},
+					{"attr_name": "CONTAINER", 		"attr_value": "Bottle"},
+					{"attr_name": "CONTAINER_SIZE", "attr_value": "40ml"},
+					{"attr_name": "COLOUR", 		"attr_value": "Blue"},
+					{"attr_name": "QTY_REMAINING", 	"attr_value": 40},
+					{"attr_name": "RATING", 		"attr_value": 5}
+			]
 		}
 	]
 }]

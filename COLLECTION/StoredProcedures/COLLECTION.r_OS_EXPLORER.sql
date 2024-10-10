@@ -14,9 +14,9 @@ END
 GO
 
 CREATE PROCEDURE COLLECTION.r_OS_EXPLORER (
-	@p_input_json		nvarchar(max),
-	@p_debug			bit = 0,
-	@p_execute			bit = 1
+	@p_input_json	CORE.json,
+	@p_debug		bit = 0,
+	@p_execute		bit = 1
 )
 AS
 BEGIN 

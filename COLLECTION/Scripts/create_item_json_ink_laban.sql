@@ -34,6 +34,20 @@ SET @json_data = N'
 					{"attr_name": "QTY_REMAINING", 	"attr_value": 39},
 					{"attr_name": "RATING", 		"attr_value": 5}
 			]
+		},
+		{
+			"item_key_value": "LAB003",
+			"item_attribute": [
+					{"attr_name": "KEY_VALUE",		"attr_value": "LAB003"},
+					{"attr_name": "BRAND",			"attr_value": "Laban"},
+					{"attr_name": "RANGE",			"attr_value": "Greek Mythology"},
+					{"attr_name": "INK_NAME", 		"attr_value": "Aphrodite"},
+					{"attr_name": "CONTAINER", 		"attr_value": "Bottle"},
+					{"attr_name": "CONTAINER_SIZE", "attr_value": "50ml"},
+					{"attr_name": "COLOUR", 		"attr_value": "Pink"},
+					{"attr_name": "QTY_REMAINING", 	"attr_value": 50},
+					{"attr_name": "RATING", 		"attr_value": 3}
+			]
 		}
 	]
 }]

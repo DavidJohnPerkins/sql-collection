@@ -3,9 +3,9 @@ DECLARE	@p_input_json CORE.json
 SET @p_input_json = N'
 [
 	{  
-		"name": "POLYCHROMOS PENCILS",
-		"description": "FABER-CASTELL POLYCHROMOS PENCILS",
-		"started": "2023-12-06",
+		"name": "OS ROAD",
+		"description": "ORDNANCE SURVEY ROAD SERIES MAPS",
+		"started": "2024-07-06",
 		"keyed": "Y"
 	}
 ]

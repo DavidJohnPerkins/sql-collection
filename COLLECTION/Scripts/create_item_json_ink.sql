@@ -8,31 +8,31 @@ SET @json_data = N'
     "parent_collection": "INK COLLECTION",
     "item":[
 		{
-			"item_key_value": "JH019",
+			"item_key_value": "JH022",
 			"item_attribute": [
-					{"attr_name": "KEY_VALUE",		"attr_value": "JH019"},
+					{"attr_name": "KEY_VALUE",		"attr_value": "JH022"},
 					{"attr_name": "BRAND",			"attr_value": "Jacques Herbin"},
-					{"attr_name": "RANGE",			"attr_value": "D Cartridgr"},
-					{"attr_name": "INK_NAME", 		"attr_value": "Bleu Nuit"},
-					{"attr_name": "CONTAINER", 		"attr_value": "Cartridge"},
-					{"attr_name": "CONTAINER_SIZE", "attr_value": "Short"},
-					{"attr_name": "COLOUR", 		"attr_value": "Blue"},
-					{"attr_name": "QTY_REMAINING", 	"attr_value": 6},
-					{"attr_name": "RATING", 		"attr_value": 4}
+					{"attr_name": "RANGE",			"attr_value": "L''encre 350"},
+					{"attr_name": "INK_NAME", 		"attr_value": "Vert Atlantide"},
+					{"attr_name": "CONTAINER", 		"attr_value": "Bottle"},
+					{"attr_name": "CONTAINER_SIZE", "attr_value": "50ml"},
+					{"attr_name": "COLOUR", 		"attr_value": "Green"},
+					{"attr_name": "QTY_REMAINING", 	"attr_value": 50},
+					{"attr_name": "RATING", 		"attr_value": 5}
 			]
 		},
 		{
-			"item_key_value": "JH020",
+			"item_key_value": "JH023",
 			"item_attribute": [
-					{"attr_name": "KEY_VALUE",		"attr_value": "JH020"},
+					{"attr_name": "KEY_VALUE",		"attr_value": "JH023"},
 					{"attr_name": "BRAND",			"attr_value": "Jacques Herbin"},
-					{"attr_name": "RANGE",			"attr_value": "D Bottle"},
-					{"attr_name": "INK_NAME", 		"attr_value": "Violette Pensée (2)"},
-					{"attr_name": "CONTAINER", 		"attr_value": "D Bottle"},
-					{"attr_name": "CONTAINER_SIZE", "attr_value": "30ml"},
-					{"attr_name": "COLOUR", 		"attr_value": "Purple"},
-					{"attr_name": "QTY_REMAINING", 	"attr_value": 30},
-					{"attr_name": "RATING", 		"attr_value": 4}
+					{"attr_name": "RANGE",			"attr_value": "Les encres essentielles"},
+					{"attr_name": "INK_NAME", 		"attr_value": "Vert Amazone"},
+					{"attr_name": "CONTAINER", 		"attr_value": "Cartridge"},
+					{"attr_name": "CONTAINER_SIZE", "attr_value": "Long"},
+					{"attr_name": "COLOUR", 		"attr_value": "Green"},
+					{"attr_name": "QTY_REMAINING", 	"attr_value": 7},
+					{"attr_name": "RATING", 		"attr_value": 5}
 			]
 		}
 	]
@@ -40,4 +40,4 @@ SET @json_data = N'
 ';
 select @json_data;
 
-EXEC COLLECTION.cu_collection_item_json @json_data,0,1
+EXEC COLLECTION.c_collection_item @json_data,0,1

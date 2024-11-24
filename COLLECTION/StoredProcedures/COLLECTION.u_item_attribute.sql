@@ -46,7 +46,8 @@ BEGIN
 
 		IF (@v_item_attr_name IS NULL OR
 			@v_collection_name IS NULL OR
-			@v_key_value IS NULL)
+			@v_key_value IS NULL OR
+			@v_new_value IS NULL)
 			RAISERROR ('Invalid JSON %s found - operation failed.', 16, 1, @p_input_json)
 
 	

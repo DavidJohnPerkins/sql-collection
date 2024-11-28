@@ -5,7 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
+/*
 IF OBJECT_ID('COLLECTION.item_attribute', 'U') IS NOT NULL
 BEGIN
 	DROP INDEX IF EXISTS U_IDX_coll_attr_id_name ON COLLECTION.item_attribute
@@ -37,4 +37,9 @@ GO
 
 ALTER TABLE COLLECTION.item_attribute ADD CONSTRAINT FK_itemattrfld_item_attr_id FOREIGN KEY (item_attr_id) REFERENCES COLLECTION.item_attribute_field(item_attr_id)
 	ON DELETE CASCADE;
+GO
+*/
+ALTER TABLE COLLECTION.item_attribute ADD 
+	valid_from	datetime	NOT NULL DEFAULT '1900-01-01',
+	valid_to	datetime	NOT NULL DEFAULT '9999-12-31'
 GO

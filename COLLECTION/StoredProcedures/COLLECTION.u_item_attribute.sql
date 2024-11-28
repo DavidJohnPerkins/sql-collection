@@ -49,7 +49,6 @@ BEGIN
 			@v_key_value IS NULL OR
 			@v_new_value IS NULL)
 			RAISERROR ('Invalid JSON %s found - operation failed.', 16, 1, @p_input_json)
-
 	
 		SELECT
 			@v_attr_id = al.attr_id
@@ -63,21 +62,24 @@ BEGIN
 		IF @v_attr_id IS NULL
 			RAISERROR ('Attribute %s for key_value %s in collection %s does not exist - operation failed.', 16, 1, @v_item_attr_name, @v_key_value, @v_collection_name)
 
+		BEGIN TRANSACTION
+
+		UPDATE
+			ia
+		SET
+			ia.attr_value = @v_new_value
+		FROM
+			COLLECTION.item_attribute ia
+		WHERE
+			ia.attr_id = @v_attr_id
+
 		IF @p_execute = 1
 		BEGIN
-
-			BEGIN TRANSACTION
-
-			UPDATE
-				ia
-			SET
-				ia.attr_value = @v_new_value
-			FROM
-				COLLECTION.item_attribute ia
-			WHERE
-				ia.attr_id = @v_attr_id
-
 			COMMIT TRANSACTION
+		END
+		ELSE
+		BEGIN 
+			ROLLBACK TRANSACTION
 		END
 		
 	END TRY

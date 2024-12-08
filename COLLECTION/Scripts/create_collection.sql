@@ -3,9 +3,9 @@ DECLARE	@p_input_json CORE.json
 SET @p_input_json = N'
 [
 	{  
-		"name": "OS ROAD",
-		"description": "ORDNANCE SURVEY ROAD SERIES MAPS",
-		"started": "2024-07-06",
+		"name": "BARTHOLOMEW HALF-INCH",
+		"description": "BARTHOLOMEW HALF-INCH CONTOURED MAPS",
+		"started": "2024-12-06",
 		"keyed": "Y"
 	}
 ]

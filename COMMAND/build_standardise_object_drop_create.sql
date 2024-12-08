@@ -22,7 +22,7 @@ GO
 
 :r "CORE/Functions/CORE.script_collection_sql.sql"
 
-:r "UTILS/Functions/UTILS.sb.sql"
+:r "UTILS/Functions/UTILS.sqbr.sql"
 :r "UTILS/Functions/UTILS.sq.sql"
 
 -- VIEWS

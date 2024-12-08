@@ -19,7 +19,7 @@ BEGIN
 	DECLARE @return_val CORE.item_attr_name 
 
 	SET @return_val = (
-		SELECT
+		SELECT TOP 1
 			a.attr_value 
 		FROM 
 			COLLECTION.item_attribute a

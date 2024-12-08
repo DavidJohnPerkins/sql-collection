@@ -21,8 +21,8 @@ CREATE PROCEDURE CORE.ru_attribute (
 AS
 BEGIN 
 
-	DECLARE @v_collection_name	CORE.item_attr_name,
-			@v_item_key_value	CORE.item_attr_value,
+	DECLARE @v_collection_name	CORE.collection_name,
+			@v_item_key_value	CORE.item_key_value,
 			@v_item_attr_name	CORE.item_attr_name,
 			@v_new_value		CORE.item_attr_value
 
@@ -36,8 +36,8 @@ BEGIN
 		FROM OPENJSON (@p_input_json)
 		WITH
 		(
-			collection_name	CORE.item_attr_name,
-			item_key_value	CORE.item_attr_value,
+			collection_name	CORE.collection_name,
+			item_key_value	CORE.item_key_value,
 			item_attr_name	CORE.item_attr_name,
 			new_value		CORE.item_attr_value
 		) c

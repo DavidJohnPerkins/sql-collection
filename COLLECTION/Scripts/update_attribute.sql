@@ -6,8 +6,8 @@ SET @json = '
 	{  
 		"item_attr_name": 	"QTY_REMAINING",
 		"collection_name":	"INK COLLECTION",
-		"key_value":		"JH023",
-		"new_value":		"6"
+		"key_value":		"GVFC005",
+		"new_value":		"7"
 	}
 '
-EXEC COLLECTION.u_item_attribute @json, 0, 0
+EXEC COLLECTION.u_item_attribute @json, 0, 1

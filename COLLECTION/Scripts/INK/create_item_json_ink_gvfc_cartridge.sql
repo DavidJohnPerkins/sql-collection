@@ -188,10 +188,24 @@ SET @json_data = N'
 					{"attr_name": "QTY_REMAINING", 	"attr_value": 6},
 					{"attr_name": "RATING", 		"attr_value": 4}
 			]
+		},
+		{
+			"item_key_value": "GVFC015",
+			"item_attribute": [
+					{"attr_name": "KEY_VALUE",		"attr_value": "GVFC015"},
+					{"attr_name": "BRAND",			"attr_value": "Graf von Faber-Castell"},
+					{"attr_name": "RANGE",			"attr_value": "Standard"},
+					{"attr_name": "INK_NAME", 		"attr_value": "Lapis Lazuli"},
+					{"attr_name": "CONTAINER", 		"attr_value": "Cartridge"},
+					{"attr_name": "CONTAINER_SIZE", "attr_value": "Short"},
+					{"attr_name": "COLOUR", 		"attr_value": "Blue"},
+					{"attr_name": "QTY_REMAINING", 	"attr_value": 6},
+					{"attr_name": "RATING", 		"attr_value": 4}
+			]
 		}
 	]
 }]
 ';
 select @json_data;
 
-EXEC COLLECTION.cu_collection_item_json @json_data,0,1
+EXEC COLLECTION.c_collection_item @json_data,0,1

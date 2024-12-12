@@ -15,7 +15,8 @@ GO
 
 CREATE PROCEDURE COLLECTION.r_collection_crystallise(
 	@p_collection_name	CORE.collection_name,
-	@p_debug			bit = 0
+	@p_debug			bit = FALSE,
+	@p_execute 			bit = TRUE
 )
 AS
 BEGIN
@@ -26,26 +27,58 @@ BEGIN
 			@view_name	CORE.view_name,
 			@result		CORE.sql_var
 
-	SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 1)
-	SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)
+	BEGIN TRY
 
-	SET @view_name = 'COLLECTION.v_base_' + REPLACE(@p_collection_name, ' ', '_')
+		IF NOT EXISTS (SELECT 1 FROM COLLECTION.v_base b WHERE b.NAME = @p_collection_name)
+			RAISERROR ('Collection %s does not exist - operation failed.', 16, 1, @p_collection_name)
 
-	SET @sql = 'DROP VIEW IF EXISTS ' + @view_name
-	EXEC (@sql)
+		SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 1)
+		SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)
 
-	SET @sql = '
-		CREATE VIEW ~view_name AS
-		~script_sql
-	'
+		SET @view_name = 'COLLECTION.v_base_' + REPLACE(@p_collection_name, ' ', '_')
 
-	SET @sql = REPLACE(@sql, '~view_name', @view_name)
-	SET @sql = REPLACE(@sql, '~script_sql', CORE.script_collection_sql(@p_collection_name))
+		BEGIN TRANSACTION
 
-	IF @p_debug = 1
-		PRINT @sql
+		SET @sql = 'DROP VIEW IF EXISTS ' + @view_name
+		EXEC (@sql)
 
-	EXEC (@sql)
+		SET @sql = '
+			CREATE VIEW ~view_name AS
+			~script_sql
+		'
+
+		SET @sql = REPLACE(@sql, '~view_name', @view_name)
+		SET @sql = REPLACE(@sql, '~script_sql', CORE.script_collection_sql(@p_collection_name))
+
+		IF @p_debug = 1
+			PRINT @sql
+
+		EXEC (@sql)
+
+		IF @p_execute = 1
+			COMMIT TRANSACTION
+		ELSE
+			ROLLBACK TRANSACTION
+			
+	END TRY
+	BEGIN CATCH  
+		DECLARE @error_message varchar(4000)
+		DECLARE @error_severity int  
+		DECLARE @error_state int
+	
+		IF @@TRANCOUNT != 0
+			ROLLBACK TRANSACTION
+
+		SELECT   
+			@error_message = ERROR_MESSAGE(),  
+			@error_severity = ERROR_SEVERITY(),  
+			@error_state = ERROR_STATE();  
+
+		RAISERROR (@error_message,
+				@error_severity,
+				@error_state
+				)
+	END CATCH
 
 END
 GO

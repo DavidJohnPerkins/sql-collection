@@ -1,0 +1,1 @@
+BACKUP DATABASE [TestDB] TO  DISK = N'/var/opt/mssql/data/Collections-20250704.bak' WITH NOFORMAT, NOINIT,  NAME = N'Collections-20250704', NOSKIP, REWIND, NOUNLOAD,  STATS = 10

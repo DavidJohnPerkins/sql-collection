@@ -30,26 +30,6 @@ BEGIN
 		INSERT INTO @insert 
 		SELECT
 			CASE WHEN c.parent_collection = '0' THEN NULL ELSE c.parent_collection END,
-			'X', 
-			ca.attr_name ,
-			ca.attr_value
-		FROM OPENJSON (@p_input_json)
-		WITH
-		(
-			parent_collection varchar(20),
-			items CORE.json AS json
-		) c
-		CROSS APPLY OPENJSON (c.items)
-		WITH
-		(
-			attr_name varchar(100),
-			attr_value varchar(100)
-		) ca
-
-		UNION ALL 
-
-		SELECT
-			c.parent_collection,
 			i.item_key_value,
 			a.attr_name ,
 			a.attr_value

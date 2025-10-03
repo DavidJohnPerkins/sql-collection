@@ -23,11 +23,12 @@ BEGIN
 
 	SET NOCOUNT ON
 
-	DECLARE @insert		CORE.item_list
+	DECLARE @attrib_insert		CORE.item_list,
+			@comment_insert		CORE.comment_list
 	
 	BEGIN TRY
 	
-		INSERT INTO @insert 
+		INSERT INTO @attrib_insert
 		SELECT
 			CASE WHEN c.parent_collection = '0' THEN NULL ELSE c.parent_collection END,
 			i.item_key_value,
@@ -36,29 +37,54 @@ BEGIN
 		FROM OPENJSON (@p_input_json)
 		WITH
 		(
-			parent_collection varchar(20),
-			collection_attribute CORE.json AS json,
-			item CORE.json AS json
+			parent_collection		varchar(20),
+			collection_attribute	CORE.json AS json,
+			item 					CORE.json AS json
 		) c
 		CROSS APPLY OPENJSON (c.item)
 		WITH
 		(
-			item_key_value varchar(20),
-			item_attribute CORE.json AS json
+			item_key_value	varchar(20),
+			item_attribute	CORE.json AS json
 		) i
 		CROSS APPLY OPENJSON (i.item_attribute)
 		WITH
 		(
-			attr_name varchar(100),
-			attr_value varchar(MAX)
+			attr_name	varchar(100),
+			attr_value	varchar(MAX)
 		) a
+
+		INSERT INTO @comment_insert
+		SELECT
+			i.item_key_value,
+			ic.comment
+		FROM 
+			OPENJSON (@p_input_json)
+		WITH
+		(
+			parent_collection		varchar(20),
+			collection_attribute	CORE.json AS json,
+			item 					CORE.json AS json
+		) c
+		CROSS APPLY OPENJSON (c.item)
+		WITH
+		(
+			item_key_value	varchar(20),
+			item_comment	CORE.json AS json
+		) i
+		CROSS APPLY OPENJSON (i.item_comment)
+		WITH
+		(
+			comment		varchar(255)
+		) ic
 
 		IF @p_debug = 1
 		BEGIN
-			SELECT 'COLLECTION.c_collection_item 1', i.* from @insert i
+			SELECT 'COLLECTION.c_collection_item 1', i.* from @attrib_insert i
+			SELECT 'Comment', c.* from @comment_insert c
 		END
 
-		EXEC CORE.c_collection_item @insert, @p_debug, @p_execute
+		EXEC CORE.c_collection_item @attrib_insert, @comment_insert, @p_debug, @p_execute
 
 	END TRY
 

@@ -14,7 +14,8 @@ END
 GO
 
 CREATE PROCEDURE CORE.c_collection_item
-	@p_insert 			CORE.item_list READONLY ,
+	@p_attrib_insert 	CORE.item_list READONLY ,
+	@p_comment_insert	CORE.comment_list READONLY,
 	@p_debug			bit = 0,
 	@p_execute			bit = 1
 AS
@@ -39,7 +40,7 @@ BEGIN
 
 	BEGIN TRY
 
-		SET @parent_coll_name = (SELECT TOP 1 parent_item FROM @p_insert)
+		SET @parent_coll_name = (SELECT TOP 1 parent_item FROM @p_attrib_insert)
 		SET @parent_coll_id = ISNULL(COLLECTION.collection_id(@parent_coll_name), 0)
 
 		IF @parent_coll_id = 0 
@@ -49,7 +50,7 @@ BEGIN
 			SELECT 
 				1
 			FROM 
-				@p_insert i 
+				@p_attrib_insert i 
 				LEFT OUTER JOIN COLLECTION.item_attribute_field iaf
 				ON i.attr_name = iaf.item_attr_name
 			WHERE 
@@ -60,13 +61,13 @@ BEGIN
 		IF (SELECT b.KEYED_COLLECTION FROM COLLECTION.v_base b WHERE [NAME] = @parent_coll_name) = 'Y'
 			SET @keyed_coll = 1
 
-		IF @keyed_coll = 0 AND EXISTS (SELECT 1 FROM @p_insert i WHERE i.attr_name = 'KEY_VALUE')
+		IF @keyed_coll = 0 AND EXISTS (SELECT 1 FROM @p_attrib_insert i WHERE i.attr_name = 'KEY_VALUE')
 			RAISERROR ('KEY_VALUE attributes found for non-keyed collection - operation failed.', 16, 1)
 
 		IF @keyed_coll = 1 
 		BEGIN 
 
-			IF NOT EXISTS (SELECT 1 FROM @p_insert i WHERE i.attr_name = 'KEY_VALUE')
+			IF NOT EXISTS (SELECT 1 FROM @p_attrib_insert i WHERE i.attr_name = 'KEY_VALUE')
 				RAISERROR ('KEY_VALUE attributes missing for keyed collection - operation failed.', 16, 1)
 
 			INSERT INTO @check_keys
@@ -74,7 +75,7 @@ BEGIN
 				i.attr_value,
 				iaf.item_attr_id
 			FROM
-				@p_insert i
+				@p_attrib_insert i
 				INNER JOIN COLLECTION.item_attribute_field iaf 
 				ON i.attr_name = iaf.item_attr_name
 			WHERE 
@@ -139,13 +140,27 @@ BEGIN
 			iaf.item_attr_id,
 			i.attr_value
 		FROM 
-			@p_insert i
+			@p_attrib_insert i
 			INNER JOIN @insert_keys ik
 			ON i.item_key_value = ik.item_key_value
 			INNER JOIN COLLECTION.item_attribute_field iaf
 			ON i.attr_name = iaf.item_attr_name
 		WHERE
 			i.parent_item IS NOT NULL			
+
+		INSERT INTO COLLECTION.item_comment (item_id, item_comment)
+		SELECT
+			ik.parent_id,
+			c.item_comment
+		FROM 
+			@p_comment_insert c
+			INNER JOIN @insert_keys ik
+			ON c.item_key_value = ik.item_key_value
+
+		IF @p_debug = 1
+		BEGIN
+			SELECT * from COLLECTION.item_comment
+		END
 		
 		IF @p_execute = 1
 		BEGIN

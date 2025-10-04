@@ -38,6 +38,6 @@ SET @json_data = N'
 	]
 }]
 ';
-select @json_data;
+--select @json_data;
 
 EXEC COLLECTION.c_collection_item @json_data,0,1

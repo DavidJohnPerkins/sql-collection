@@ -15,7 +15,8 @@ GO
 
 CREATE VIEW COLLECTION.v_base AS
 
-	SELECT 
+	SELECT
+		item_id,
 		CONVERT(varchar(50), [NAME])			AS [NAME], 
 		CONVERT(varchar(255), [DESCRIPTION])	AS [DESCRIPTION], 
 		[STARTED],

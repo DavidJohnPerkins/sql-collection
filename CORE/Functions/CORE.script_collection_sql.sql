@@ -30,18 +30,33 @@ BEGIN
 	SET @sql = '
 		SELECT 
 			item_id,
-			~col_sql_sel
+			~col_sql_sel,
+			comments AS COMMENTS
 		FROM (
 			SELECT 
 				i.item_id ,
 				ia.attr_value ,
-				af.item_attr_name 
+				af.item_attr_name,
+				c_sub.comments
 			FROM
 				COLLECTION.item_attribute_field af
 				INNER JOIN COLLECTION.item_attribute ia
 					INNER JOIN COLLECTION.item i
 					ON ia.item_id = i.item_id
 				ON af.item_attr_id = ia.item_attr_id
+				OUTER APPLY (
+					SELECT
+						STRING_AGG(x.item_comment, ^/^) AS comments
+					FROM (
+						SELECT
+							c.item_comment
+						FROM 
+							COLLECTION.item_comment c
+						WHERE
+							c.item_id = i.item_id
+						ORDER BY
+							c.comment_id OFFSET 0 ROWS) x
+				) c_sub
 			WHERE
 				i.item_parent = COLLECTION.collection_id(^~coll_name^)
 			) st

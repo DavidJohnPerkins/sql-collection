@@ -45,6 +45,8 @@ BEGIN
 				v.map_image
 			FROM 
 				COLLECTION.v_base_OS_EXPLORER v
+			ORDER BY 
+				v.key_value
 		END
 		ELSE
 		BEGIN
@@ -58,7 +60,8 @@ BEGIN
 				v.map_title,
 				v.main_settlements,
 				v.publish_date,
-				v.map_image
+				v.map_image,
+				v.map_image_rear
 			FROM 
 				COLLECTION.v_base_OS_EXPLORER v
 			WHERE 

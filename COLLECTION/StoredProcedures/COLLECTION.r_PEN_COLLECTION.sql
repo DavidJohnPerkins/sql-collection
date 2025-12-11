@@ -6,14 +6,14 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.r_OS_EXPLORER') AND [type] IN ('P', 'PC'))
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'COLLECTION.r_PEN_COLLECTION') AND [type] IN ('P', 'PC'))
 BEGIN 
-	DROP PROCEDURE COLLECTION.r_OS_EXPLORER
-	PRINT '########## COLLECTION.r_OS_EXPLORER dropped successfully ##########'
+	DROP PROCEDURE COLLECTION.r_PEN_COLLECTION
+	PRINT '########## COLLECTION.r_PEN_COLLECTION dropped successfully ##########'
 END
 GO
 
-CREATE PROCEDURE COLLECTION.r_OS_EXPLORER (
+CREATE PROCEDURE COLLECTION.r_PEN_COLLECTION (
 	@p_input_json	CORE.json,
 	@p_debug		bit = 0,
 	@p_execute		bit = 1
@@ -38,13 +38,13 @@ BEGIN
 			SELECT 
 				v.*
 			FROM 
-				COLLECTION.v_base_OS_EXPLORER v
+				COLLECTION.v_base_PEN_COLLECTION v
 			ORDER BY 
 				v.key_value
 		END
 		ELSE
 		BEGIN
-			IF NOT EXISTS (SELECT 1 FROM COLLECTION.v_base_OS_EXPLORER v WHERE v.item_id = @v_item_id)
+			IF NOT EXISTS (SELECT 1 FROM COLLECTION.v_base_PEN_COLLECTION v WHERE v.item_id = @v_item_id)
 				RAISERROR ('An item with item_id %d could not be found.', 16, 1, @v_item_id)
 
 			SELECT 
@@ -77,4 +77,4 @@ BEGIN
 	END CATCH
 END
 GO
-PRINT '########## COLLECTION.r_OS_EXPLORER created successfully ##########'
+PRINT '########## COLLECTION.r_PEN_COLLECTION created successfully ##########'

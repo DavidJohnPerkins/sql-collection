@@ -36,14 +36,7 @@ BEGIN
 		IF @v_item_id = -1
 		BEGIN
 			SELECT 
-				v.item_id,
-				v.map_number,
-				v.map_title,
-				v.publish_date,
-				v.main_settlements,
-				v.key_value,
-				v.map_image,
-				v.map_image_rear
+				v.*
 			FROM 
 				COLLECTION.v_base_OS_EXPLORER v
 			ORDER BY 
@@ -55,14 +48,7 @@ BEGIN
 				RAISERROR ('An item with item_id %d could not be found.', 16, 1, @v_item_id)
 
 			SELECT 
-				v.item_id,
-				v.map_number,
-				v.map_title,
-				v.publish_date,
-				v.main_settlements,
-				v.key_value,
-				v.map_image,
-				v.map_image_rear
+				v.*
 			FROM 
 				COLLECTION.v_base_OS_EXPLORER v
 			WHERE 

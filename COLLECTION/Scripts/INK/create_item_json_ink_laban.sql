@@ -48,9 +48,23 @@ SET @json_data = N'
 					{"attr_name": "QTY_REMAINING", 	"attr_value": 50},
 					{"attr_name": "RATING", 		"attr_value": 3}
 			]
+		},
+		{
+			"item_key_value": "LAB004",
+			"item_attribute": [
+					{"attr_name": "KEY_VALUE",		"attr_value": "LAB004"},
+					{"attr_name": "BRAND",			"attr_value": "Laban"},
+					{"attr_name": "RANGE",			"attr_value": "Greek Mythology"},
+					{"attr_name": "INK_NAME", 		"attr_value": "Hera"},
+					{"attr_name": "CONTAINER", 		"attr_value": "Bottle"},
+					{"attr_name": "CONTAINER_SIZE", "attr_value": "50ml"},
+					{"attr_name": "COLOUR", 		"attr_value": "Green"},
+					{"attr_name": "QTY_REMAINING", 	"attr_value": 50},
+					{"attr_name": "RATING", 		"attr_value": 5}
+			]
 		}
 	]
 }]
 ';
 --select @json_data;
-EXEC COLLECTION.c_collection_item_json @json_data,0,1
+EXEC COLLECTION.c_collection_item @json_data,0,1

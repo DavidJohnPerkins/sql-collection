@@ -31,7 +31,7 @@ BEGIN
 		SELECT 
 			item_id,
 			~col_sql_sel,
-			comments AS COMMENTS
+			COALESCE(comments, ^^) AS comments
 		FROM (
 			SELECT 
 				i.item_id ,

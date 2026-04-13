@@ -24,7 +24,7 @@ BEGIN
 			STRING_AGG( 
 				CASE WHEN @p_typed = 1 THEN
 					CASE WHEN  w.return_length IS NOT NULL THEN
-					'CONVERT(' + w.type_sql + '(' + CONVERT(varchar, w.return_length) + '), ' + w.item_attr_name + ')' + ' AS ' + w.item_attr_name ELSE w.item_attr_name END
+					'COALESCE(CONVERT(' + w.type_sql + '(' + CONVERT(varchar, w.return_length) + '), ' + w.item_attr_name + '), '''')' + ' AS ' + w.item_attr_name ELSE w.item_attr_name END
 				ELSE w.item_attr_name END, ', ')
 		FROM (
 			SELECT DISTINCT 

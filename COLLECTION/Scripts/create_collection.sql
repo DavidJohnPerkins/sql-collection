@@ -1,11 +1,14 @@
+USE Collections
+GO
+
 DECLARE	@p_input_json CORE.json
 
 SET @p_input_json = N'
 [
 	{  
-		"name": "OS 1 TO 25K",
-		"description": "ORDNANCE SURVEY 1:25000 FIRST SERIES MAPS",
-		"started": "2024-12-08",
+		"name": "SCORES",
+		"description": "MUSIC SCORES",
+		"started": "2026-05-17",
 		"keyed": "Y"
 	}
 ]

@@ -40,7 +40,9 @@ BEGIN
 			FROM 
 				COLLECTION.v_base_POLYCHROMOS_PENCILS v
 			ORDER BY 
-				v.key_value
+				v.COLOUR_GROUP,
+				v.RGB_RED + v.RGB_GREEN + v.RGB_BLUE desc
+				--v.key_value
 		END
 		ELSE
 		BEGIN

@@ -3,10 +3,10 @@ DECLARE	@json_data CORE.json
 SET @json_data = N'
 [
 	{  
-		"collection_name": "OS EXPLORER",
-		"item_key_value": "EXP1022003",
-		"item_attr_name": "main_settlements",
-		"new_value": "Penzance|St Ives|Land''s End"
+		"collection_name": "POLYCHROMOS PENCILS",
+		"item_key_value": "POLY105",
+		"item_attr_name": "LOCATION",
+		"new_value": "LOOSE"
 	}
 ]
 ';

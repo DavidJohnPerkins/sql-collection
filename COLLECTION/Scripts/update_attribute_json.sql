@@ -4,9 +4,9 @@ SET @json_data = N'
 [
 	{  
 		"collection_name": "POLYCHROMOS PENCILS",
-		"item_key_value": "POLY105",
+		"item_key_value": "POLY134",
 		"item_attr_name": "LOCATION",
-		"new_value": "LOOSE"
+		"new_value": "PROMISED"
 	}
 ]
 ';

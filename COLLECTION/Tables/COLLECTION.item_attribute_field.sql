@@ -31,6 +31,8 @@ GO
 CREATE UNIQUE CLUSTERED INDEX U_IDX_item_attr_fld_id_name ON COLLECTION.item_attribute_field (item_attr_id, item_attr_name) ON [PRIMARY];
 GO
 */
+
+/*
 BEGIN TRANSACTION
 
 ALTER TABLE COLLECTION.item_attribute_field
@@ -92,4 +94,21 @@ WHERE
 	iaf.item_attr_name IN ('MAIN SETTLEMENTS', 'DESCRIPTION', 'MAP TITLE')
 
  COMMIT TRANSACTION
- 
+ */
+
+BEGIN TRANSACTION
+
+ALTER TABLE COLLECTION.item_attribute_field
+	ADD is_dimension bit NOT NULL DEFAULT 0
+GO
+
+UPDATE
+	iaf
+SET
+	iaf.is_dimension = 1
+FROM
+	COLLECTION.item_attribute_field iaf
+WHERE
+	iaf.item_attr_name IN ('LOCATION', 'COLOUR_GROUP')
+
+COMMIT TRANSACTION

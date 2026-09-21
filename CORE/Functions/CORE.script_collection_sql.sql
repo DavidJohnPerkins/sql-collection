@@ -14,7 +14,7 @@ END
 GO
 
 CREATE FUNCTION CORE.script_collection_sql(@p_collection_name CORE.collection_name)
-RETURNS nvarchar(max) 
+RETURNS CORE.sql_var
 AS
 BEGIN
 

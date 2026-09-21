@@ -22,18 +22,18 @@ AS
 BEGIN
 
 	DECLARE	@sql		CORE.sql_var = '',
-			@col_sql	CORE.sql_var = '',
-			@col_pvt	CORE.sql_var = '',
-			@view_name	CORE.view_name,
-			@result		CORE.sql_var
+			--@col_sql	CORE.sql_var = '',
+			--@col_pvt	CORE.sql_var = '',
+			@view_name	CORE.view_name--,
+			--@result		CORE.sql_var
 
 	BEGIN TRY
 
 		IF NOT EXISTS (SELECT 1 FROM COLLECTION.v_base b WHERE b.NAME = @p_collection_name)
 			RAISERROR ('Collection %s does not exist - operation failed.', 16, 1, @p_collection_name)
 
-		SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 1)
-		SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)
+		--SET @col_sql = COLLECTION.child_column_list(@p_collection_name, 1)
+		--SET @col_pvt = COLLECTION.child_column_list(@p_collection_name, 0)
 
 		SET @view_name = 'COLLECTION.v_base_' + REPLACE(@p_collection_name, ' ', '_')
 
